@@ -8,7 +8,7 @@
     "build": "electron-builder --win nsis"
   },
   "dependencies": {
-    "minecraft-launcher-core": "3.19.0",
+    "minecraft-launcher-core": "3.18.2",
     "msmc": "5.0.5",
     "electron-updater": "6.6.2"
   },
