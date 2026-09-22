@@ -1,0 +1,26 @@
+name: Build Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+        working-directory: windows
+
+      - run: npm run build
+        working-directory: windows
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TrawkaLauncher-Windows
+          path: windows/dist/*.exe
