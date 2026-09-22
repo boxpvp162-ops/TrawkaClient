@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   windows:
     name: Build Windows EXE
     runs-on: windows-latest
@@ -32,7 +31,6 @@ jobs:
           name: TrawkaLauncher-Windows
           path: windows/dist/*.exe
 
-
   android:
     name: Build Android APK
     runs-on: ubuntu-latest
@@ -45,12 +43,146 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
+
+      - name: Utwórz projekt Android
+        run: |
+          mkdir -p android/app/src/main/java/pl/trawka/launcher
+          mkdir -p android/app/src/main/assets
+
+          cat > android/settings.gradle <<'EOF'
+          pluginManagement {
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+
+          dependencyResolutionManagement {
+              repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+
+          rootProject.name = "TrawkaLauncher"
+          include(":app")
+          EOF
+
+          cat > android/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application' version '8.8.2' apply false
+          }
+          EOF
+
+          cat > android/app/build.gradle <<'EOF'
+          plugins {
+              id 'com.android.application'
+          }
+
+          android {
+              namespace 'pl.trawka.launcher'
+              compileSdk 35
+
+              defaultConfig {
+                  applicationId 'pl.trawka.launcher'
+                  minSdk 23
+                  targetSdk 35
+                  versionCode 4
+                  versionName '4.0'
+              }
+          }
+          EOF
+
+          cat > android/app/src/main/AndroidManifest.xml <<'EOF'
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+              <uses-permission android:name="android.permission.INTERNET" />
+
+              <application
+                  android:theme="@style/AppTheme"
+                  android:label="TrawkaLauncher"
+                  android:usesCleartextTraffic="true">
+
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true">
+
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+
+                  </activity>
+
+              </application>
+
+          </manifest>
+          EOF
+
+          mkdir -p android/app/src/main/res/values
+
+          cat > android/app/src/main/res/values/styles.xml <<'EOF'
+          <resources>
+              <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+                  <item name="android:fontFamily">sans</item>
+                  <item name="android:windowActionModeOverlay">true</item>
+                  <item name="android:colorAccent">#00FF88</item>
+              </style>
+          </resources>
+          EOF
+
+          cat > android/app/src/main/java/pl/trawka/launcher/MainActivity.java <<'EOF'
+          package pl.trawka.launcher;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+
+                  WebView webView = new WebView(this);
+
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setAllowFileAccess(true);
+                  settings.setAllowContentAccess(true);
+
+                  webView.setWebViewClient(new WebViewClient());
+                  webView.loadUrl("file:///android_asset/index.html");
+
+                  setContentView(webView);
+              }
+          }
+          EOF
+
+          cp index.html android/app/src/main/assets/index.html
+
+          if [ -f style.css ]; then
+            cp style.css android/app/src/main/assets/style.css
+          fi
+
+          if [ -f renderer.js ]; then
+            cp renderer.js android/app/src/main/assets/renderer.js
+          fi
+
+          if [ -f main.js ]; then
+            cp main.js android/app/src/main/assets/main.js
+          fi
 
       - name: Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.10'
+          gradle-version: '8.10.2'
 
       - name: Budowanie APK
         run: gradle :app:assembleDebug
