@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pl">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TrawkaLauncher</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="logo">TL</div><div><b>TrawkaLauncher</b><small>V4 • Windows</small></div><div class="spacer"></div><span id="user">Nie zalogowano</span><button id="login">Zaloguj Microsoft</button></header>
+<main>
+<section class="hero"><h1>Graj w Minecraft</h1><p>Jeden launcher • Twoje profile • Twoje serwery</p>
+<div class="grid">
+<label>Wersja<select id="version"><option>1.21.4</option><option>1.21.1</option><option>1.20.6</option><option>1.20.1</option><option>1.19.4</option><option>1.18.2</option><option>1.16.5</option></select></label>
+<label>RAM<select id="ram"><option value="2048">2 GB</option><option value="4096" selected>4 GB</option><option value="6144">6 GB</option><option value="8192">8 GB</option></select></label>
+</div>
+<button class="play" id="play">▶ GRAJ</button><button id="folder">Otwórz folder Minecraft</button>
+<div id="status"></div></section>
+<aside><h2>Serwery</h2><div class="server">🏠 Trawka Network<br><small>Dodaj swój serwer w kolejnej wersji</small></div><h2>Profil</h2><div id="profile">Zaloguj konto Microsoft, aby zobaczyć profil.</div></aside>
+</main><script src="renderer.js"></script></body></html>
