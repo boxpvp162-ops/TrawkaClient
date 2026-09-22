@@ -1,8 +1,8 @@
 {
   "name": "trawka-launcher",
   "version": "4.0.0",
-  "description": "TrawkaLauncher V4 - Windows launcher",
-  "main": "src/main.js",
+  "description": "TrawkaLauncher V4",
+  "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder --win nsis"
@@ -20,16 +20,13 @@
     "appId": "pl.trawka.launcher",
     "productName": "TrawkaLauncher",
     "files": [
-      "src/**/*",
+      "*.js",
+      "*.html",
+      "*.css",
       "package.json"
     ],
     "win": {
       "target": "nsis"
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "TWOJ_GITHUB_LOGIN",
-      "repo": "TrawkaLauncher"
     }
   }
 }
