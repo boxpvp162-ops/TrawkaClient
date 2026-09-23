@@ -27,6 +27,11 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
+      - name: TrawkaClient
+        run: |
+          sed -i 's/<string name="app_name">[^<]*/<string name="app_name">TrawkaLauncher/' app_pojavlauncher/src/main/res/values/strings.xml
+        working-directory: amethyst
+
       - name: Buduj prawdziwy launcher Minecraft
         run: |
           chmod +x gradlew
