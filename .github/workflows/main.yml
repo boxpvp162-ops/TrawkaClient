@@ -29,7 +29,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: TrawkaLauncher-Windows
-              path: windows/dist/*.exe dist/*.exe
+          path: '**/dist/*.exe'
 
   android:
     name: Build Android APK
