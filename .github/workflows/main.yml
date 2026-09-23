@@ -4,34 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  windows:
-    name: Build Windows EXE
-    runs-on: windows-latest
-
-    steps:
-      - name: Pobierz projekt
-        uses: actions/checkout@v4
-
-      - name: Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Instalacja zależności
-        run: npm install
-        working-directory: windows
-
-      - name: Budowanie EXE
-        run: npm run build
-        working-directory: windows
-
-      - name: Udostępnij EXE
-        uses: actions/upload-artifact@v4
-        with:
-          name: TrawkaLauncher-Windows
-          path: '**/dist/*.exe'
-
-  android:
+   android:
     name: Build Android APK
     runs-on: ubuntu-latest
 
